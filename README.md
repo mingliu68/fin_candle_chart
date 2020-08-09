@@ -1,1 +1,1 @@
-# fin_candle_chart
+# Financial Candle Chart
