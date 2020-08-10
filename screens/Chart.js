@@ -17,7 +17,7 @@ const Chart = ({ route, navigation }) => {
     const [getMin, setGetMin] = useState(null)
     const [getMax, setGetMax] = useState(null)
 
-    const getMinMax = () => {
+    const getMinMax = useCallback(() => {
         let max = candles[0].high;
         let min = candles[0].low
         candles.forEach((item, index) => {
@@ -27,14 +27,11 @@ const Chart = ({ route, navigation }) => {
         setGetMin(min);
         setGetMax(max);
         setFoundMinMax(true)
-    }
+    })
 
     useEffect(() => {
         getMinMax();
     }, [])
-
-
-
 
     return (
 

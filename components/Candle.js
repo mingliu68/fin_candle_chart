@@ -2,20 +2,32 @@ import React from "react";
 import { View, Text, StyleSheet } from 'react-native';
 
 const Candle = ({ date, day, open, high, low, close, index, size, max, min }) => {
-    const background = close >= open ? "green" : "red"
+    const background =
+        close >= open
+            ? "green"
+            : "red"
+
     const topStyle = {
         backgroundColor: background,
         width: 2,
-        height: close >= open ? Math.floor((Math.abs(high - close) / (max - min)) * size) : Math.floor((Math.abs(high - open) / (max - min)) * size),
+        height:
+            close >= open
+                ? (Math.abs(high - close) / (max - min)) * size
+                : (Math.abs(high - open) / (max - min)) * size,
     }
+
     const centerStyle = {
         backgroundColor: background,
-        height: Math.floor((Math.abs(close - open) / (max - min)) * size),
+        height: (Math.abs(close - open) / (max - min)) * size,
         width: "100%"
     }
+
     const bottomStyle = {
         backgroundColor: background,
-        height: close >= open ? Math.floor((Math.abs(open - low) / (max - min)) * size) : Math.floor((Math.abs(close - low) / (max - min)) * size),
+        height:
+            close >= open
+                ? (Math.abs(open - low) / (max - min)) * size
+                : (Math.abs(close - low) / (max - min)) * size,
         width: 2
     }
 
