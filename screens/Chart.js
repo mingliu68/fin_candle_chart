@@ -7,48 +7,55 @@ import Values from '../components/Values';
 import Content from '../components/Content';
 import Candle from '../components/Candle';
 
-// const screenWidth = Dimensions.get("window").width;
-// const screenHeight = Dimensions.get("window").height;
 const { width: size } = Dimensions.get("window");
 const candles = data.slice(0, 20)
 const caliber = size / candles.length
 
 const Chart = ({ route, navigation }) => {
-    const [max, setMax] = useState(candles[0].high)
-    const [min, setMin] = useState(candles[0].low)
-    const [foundMinMax, setFoundMinMax] = useState(false)
 
-    const getMinMax = useCallback(() => {
-        candles.map(candle => {
-            candle.high > max ? setMax(candle.high) : null
-            candle.low < min ? setMin(candle.low) : null
+    const [foundMinMax, setFoundMinMax] = useState(false)
+    const [getMin, setGetMin] = useState(null)
+    const [getMax, setGetMax] = useState(null)
+
+    const getMinMax = () => {
+        let max = candles[0].high;
+        let min = candles[0].low
+        candles.forEach((item, index) => {
+            max = max < item["high"] ? item["high"] : max;
+            min = min > item["low"] ? item["low"] : min;
         })
+        setGetMin(min);
+        setGetMax(max);
         setFoundMinMax(true)
-    })
+    }
 
     useEffect(() => {
         getMinMax();
     }, [])
 
+
+
+
     return (
-        <ScrollView style={styles.container}>
+
+        <View style={styles.container}>
             <View>
                 <StatusBar style="light" />
 
                 <Header goBack={() => navigation.goBack()} />
                 <Values {...{ candles, caliber }} />
             </View>
-            <View style={{ height: size, flexDirection: 'row', justifyContent: 'space-around', }}>
+            <View style={{ height: size, width: size, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-start' }}>
                 {
                     foundMinMax
                         ? candles.map((candle, index) => (
-                            <Candle {...candle} key={index} size={size} max={max} min={min} />
+                            <Candle {...candle} key={index} size={size} max={getMax} min={getMin} />
                         ))
-                        : null
+                        : <View styles={{ backgroundColor: "#eeeeee" }} />
                 }
             </View>
             <Content />
-        </ScrollView>
+        </View>
     )
 }
 
@@ -58,6 +65,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "black",
-
+    },
+    textLight: {
+        color: "white"
     }
 })
