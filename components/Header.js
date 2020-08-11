@@ -58,15 +58,20 @@ export default Header;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 50,
+        // marginTop: 50,
+
     },
     content: {
         flex: 1,
-        padding: 16
+        padding: 16,
+
     },
     header: {
         flexDirection: "row",
-        alignItems: "center"
+        alignItems: "center",
+        borderBottomColor: "#999",
+        paddingBottom: 10,
+        borderBottomWidth: 0.5
     },
     icon: {
         marginRight: 16

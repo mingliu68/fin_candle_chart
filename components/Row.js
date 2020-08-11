@@ -15,7 +15,7 @@ export default Row;
 const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     label: {
         fontSize: 20,

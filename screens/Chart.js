@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, SafeAreaView, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import data from '../data.json';
 import Header from '../components/Header';
@@ -8,51 +8,74 @@ import Content from '../components/Content';
 import Candle from '../components/Candle';
 
 const { width: size } = Dimensions.get("window");
-const candles = data.slice(0, 20)
+let candles = data.slice(0, 20)
 const caliber = size / candles.length
 
-const Chart = ({ route, navigation }) => {
+const formatValue = (value) =>
+    new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+    }).format(value);
 
-    const [foundMinMax, setFoundMinMax] = useState(false)
-    const [getMin, setGetMin] = useState(null)
-    const [getMax, setGetMax] = useState(null)
+
+const Chart = ({ route, navigation }) => {
+    const [candleIndex, setCandleIndex] = useState();
+    console.log("Candle Index initial MAIN(chart): " + candleIndex)
+    const [foundMinMax, setFoundMinMax] = useState(false);
+    const [getMin, setGetMin] = useState(null);
+    const [getMax, setGetMax] = useState(null);
 
     const getMinMax = useCallback(() => {
+
         let max = candles[0].high;
         let min = candles[0].low
         candles.forEach((item, index) => {
             max = max < item["high"] ? item["high"] : max;
             min = min > item["low"] ? item["low"] : min;
+            candles[index] = { ...item, formatHigh: formatValue(item.high), formatLow: formatValue(item.low), formatOpen: formatValue(item.open), formatClose: formatValue(item.close) }
         })
         setGetMin(min);
         setGetMax(max);
         setFoundMinMax(true)
     })
 
+    const updateValues = ind => {
+        setCandleIndex(ind)
+    }
+
     useEffect(() => {
         getMinMax();
+        setCandleIndex(0)
     }, [])
+
+
 
     return (
 
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View>
                 <StatusBar style="light" />
 
                 <Header goBack={() => navigation.goBack()} />
-                <Values {...{ candles, caliber }} />
+                {
+                    foundMinMax
+                        ? <Values {...{ candles, caliber }} candleIndex={candleIndex} key={candleIndex} />
+                        : <Text>Getting Values</Text>
+                }
+
             </View>
-            <View style={{ height: size, width: size, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-start' }}>
+            <View style={{ height: size, width: size, flexDirection: 'row-reverse', justifyContent: 'space-around', alignItems: 'flex-start' }}>
                 {
                     foundMinMax
                         ? candles.map((candle, index) => (
-                            <Candle {...candle} key={index} size={size} max={getMax} min={getMin} />
+                            <Candle {...candle} key={index} index={index} size={size} max={getMax} min={getMin} updateValues={updateValues} />
                         ))
                         : <View styles={{ backgroundColor: "#eeeeee" }} />
                 }
             </View>
+
             <Content />
-        </View>
+        </ScrollView>
     )
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const Candle = ({ date, day, open, high, low, close, index, size, max, min }) => {
+const Candle = ({ date, day, open, high, low, close, index, size, max, min, updateValues }) => {
     const background =
         close >= open
             ? "green"
@@ -32,16 +32,21 @@ const Candle = ({ date, day, open, high, low, close, index, size, max, min }) =>
     }
 
     return (
-        <View key={index} style={{
-            width: size / 30,
-            alignItems: "center",
-            height: ((high - low) / (max - min)) * size,
-            marginTop: ((max - high) / (max - min)) * size,
-        }}>
-            <View style={topStyle} />
-            <View style={centerStyle} />
-            <View style={bottomStyle} />
-        </View>
+        <TouchableOpacity
+            style={{
+                width: size / 30,
+                alignItems: "center",
+                height: ((high - low) / (max - min)) * size,
+                marginTop: ((max - high) / (max - min)) * size,
+            }}
+            onPress={() => updateValues(index)}
+        >
+            <>
+                <View style={topStyle} />
+                <View style={centerStyle} />
+                <View style={bottomStyle} />
+            </>
+        </TouchableOpacity>
     )
 }
 
