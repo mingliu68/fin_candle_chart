@@ -51,3 +51,4 @@ const Candle = ({ date, day, open, high, low, close, index, size, max, min, upda
 }
 
 export default Candle;
+

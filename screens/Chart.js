@@ -32,7 +32,13 @@ const Chart = ({ route, navigation }) => {
         candles.forEach((item, index) => {
             max = max < item["high"] ? item["high"] : max;
             min = min > item["low"] ? item["low"] : min;
-            candles[index] = { ...item, formatHigh: formatValue(item.high), formatLow: formatValue(item.low), formatOpen: formatValue(item.open), formatClose: formatValue(item.close) }
+            candles[index] = {
+                ...item,
+                formatHigh: formatValue(item.high),
+                formatLow: formatValue(item.low),
+                formatOpen: formatValue(item.open),
+                formatClose: formatValue(item.close)
+            }
         })
         setGetMin(min);
         setGetMax(max);
@@ -64,7 +70,7 @@ const Chart = ({ route, navigation }) => {
                 }
 
             </View>
-            <View style={{ height: size, width: size, flexDirection: 'row-reverse', justifyContent: 'space-around', alignItems: 'flex-start' }}>
+            <View style={{ height: size, width: size, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-start' }}>
                 {
                     foundMinMax
                         ? candles.map((candle, index) => (
